@@ -74,8 +74,27 @@ routeBooks.get('/:bookid', async (req, res) => {
 
 })
 
-routeBooks.post('/', (req, res) => {
+routeBooks.post('/', async (req, res) => {
+
     // TODO
+
+    console.info(req.body)
+
+    try {
+        const r = await bookService.addBook(req.body);
+        res.status(201).json({
+            success: true, 
+            books: r
+        })
+    } catch (err) {
+        if (err instanceof DatabaseError) {
+            responseError({res, message: err.message})
+        } else if (err instanceof RangeError) {
+            responseError({res, code: 404, status: 'not found', message: err.message})
+        } else {
+            responseError({res, code: 555, status: 'not found', message: err.message})
+        }
+    }
 
 })
 
