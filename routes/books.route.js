@@ -17,7 +17,25 @@ routeBooks.get('/', (req, res) => {
 
 routeBooks.get('/:bookid', (req, res) => {
     // TODO
+
 })
+
+routeBooks.post('/', (req, res) => {
+    // TODO
+
+})
+
+
+
+routeBooks.put('/', (req, res) => {
+    // TODO
+})
+
+routeBooks.delete('/:bookid', (req, res) => {
+    // TODO
+
+})
+
 
 
 
