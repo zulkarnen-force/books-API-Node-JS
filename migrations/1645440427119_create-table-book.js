@@ -5,33 +5,35 @@ exports.shorthands = undefined;
 exports.up = pgm => {
     pgm.createTable('book', {
         id: {
-           type: VARCHAR(50),
-           notNull: true, 
+           type: 'VARCHAR(50)',
+           notNull: true
         }, 
         title:{
-            type: VARCHAR(50),
-            notNull: true,
+            type: 'VARCHAR(100)',
+            notNull: true
         },
         authors: {
-            type: TEXT[5],
+            type: 'TEXT[5]',
             notNull: true,
         },
         isbn: {
-            type: INTEGER(25),
+            type: 'INTEGER',
             notNull: true,
         },
         pages:{
-            type: INTEGER(5),
+            type: 'INTEGER',
             notNull: true,
         },
         year: {
-            type: INTEGER(4)
+            type: 'INTEGER',
+            notNull: true
         },
         created_at: {
-            type: TEXT, notNull: true
+            type: 'TEXT',
+            notNull: true
         },
         updated_at:{
-            type: TEXT, 
+            type: 'TEXT', 
             notNull: true
         },
     })
