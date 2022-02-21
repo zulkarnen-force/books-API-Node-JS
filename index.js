@@ -1,10 +1,15 @@
 require('dotenv').config('../config')
+const { json } = require('body-parser');
+const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const host = process.env.PGHOST;
 const port = process.env.PORT;
 
 const routes = require('./routes')
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/', routes);
 
