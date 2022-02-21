@@ -4,7 +4,7 @@ const routeBooks = require('./routes/books.route');
 const routes = express.Router();
 
 
-routes.use('/books', routeBooks)
+routes.use('/books', routeBooks);
 
 
 
