@@ -50,11 +50,48 @@ class BookService {
         try {
             console.info(`values: ${query.values}`)
             const result = await this.db.query(query);
+
             if (!result.rows[0].id) {
                 throw new Error('Add new note failure')
             }
     
-            return result;
+            return result.rows[0].id;
+            
+        } catch (err) {
+            console.info(err) ;
+        } 
+
+        
+
+    }
+
+
+
+    async updateBookById({id, title, authors, isbn, pages, year}) {
+
+        console.info(JSON.stringify(authors))
+
+        console.info(authors)
+
+        
+        const createdAt = new Date().toLocaleString("id-ID");;
+        const updatedAt = createdAt;
+
+        const query = {
+            text: 'INSERT INTO book (id, title, authors, isbn, pages, year, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
+            values: [id, title, authors, isbn, pages, year, createdAt, updatedAt]
+        }
+
+        try {
+            console.info(`values: ${query.values}`)
+            const result = await this.db.query(query);
+
+            if (!result.rows[0].id) {
+                throw new Error('Add new note failure')
+            }
+    
+            return result.rows[0].id;
+            
         } catch (err) {
             console.info(err) ;
         } 
