@@ -25,7 +25,7 @@ This API adalah fire.
 **Example Response**
 
 
-```javascript
+```json
 {
     "success": true,
     "data": {
