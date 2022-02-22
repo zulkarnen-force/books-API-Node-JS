@@ -15,6 +15,16 @@ class BookService {
         }
     }
 
+    async getBooksSortBy(sortQuery) {
+        try {
+            const result = await this.db.query(`SELECT * FROM book ORDER BY ${sortQuery}`);
+            console.log({Hasil: {datas: result.rows}});
+            return result.rows
+        } catch (err) {
+            throw err;
+        }
+    }
+
 
 
     async getBookById(id) {
