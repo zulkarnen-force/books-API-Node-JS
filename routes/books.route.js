@@ -8,7 +8,6 @@ let bookService = new BookService();
 
 function responseError({res, code=500, status='internal server error', message='error from internal',  detail=''})  {
 
-    console.info(`Status bug ${status}`)
    
     const errorValues = Object.assign({}, 
         code ? {code} : null,
@@ -28,13 +27,16 @@ function responseError({res, code=500, status='internal server error', message='
 
 function responseSuccess({res, code=200, status='OK', message='success',  detail='', data})  {
 
-      
+    
+    console.info({data})
+
     const successValues = Object.assign({},
         {success: true},
         code ? {code} : null,
         status ? {status}  : null,
         message ? {message}  : null,
         detail ? {detail}: null,
+        data ? {data}: null
     )
   
   
@@ -90,7 +92,7 @@ routeBooks.post('/', async (req, res) => {
 
     // TODO
 
-    console.info(req.body)
+   
 
     try {
         const id = await bookService.addBook(req.body);
@@ -125,11 +127,11 @@ routeBooks.put('/:bookid', async (req, res) => {
 
     try {
         
-        const resu = await bookService.updateBookById(req.params.bookid, req.body);
+        const result = await bookService.updateBookById(req.params.bookid, req.body);
+        
+        console.info({iniHasil: result})
 
-        console.info(resu)
-
-        responseSuccess({res, code: 201, status: "updated", message: "update book successfull", detail: "detail"})
+        responseSuccess({res, code: 201, status: "updated", message: "update book successfull", detail: "detail", data: result })
 
     } catch (err) {
         if (err instanceof DatabaseError) {
@@ -144,8 +146,26 @@ routeBooks.put('/:bookid', async (req, res) => {
 
 })
 
-routeBooks.delete('/:bookid', (req, res) => {
-    // TODO
+
+
+routeBooks.delete('/:bookid', async (req, res) => {
+
+    try {
+        
+        const book = await bookService.deleteBookById(req.params.bookid);
+
+        responseSuccess({res, code: 200, status: "deleted", message: "deleted book successfully", detail: `book with title ${book.title} success deleted`})
+
+    } catch (err) {
+        if (err instanceof DatabaseError) {
+            responseError({res, message: err.message})
+        } else if (err instanceof RangeError) {
+            responseError({res, code: 404, status: 'not found', message: err.message})
+        } else {
+            responseError({res, code: 500, status: 'bad backend', message: err.message})
+        }
+    }
+
 
 })
 

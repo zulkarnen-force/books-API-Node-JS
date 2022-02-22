@@ -16,6 +16,7 @@ class BookService {
     }
 
 
+
     async getBookById(id) {
         try {
             const book = (await this.db.query(`SELECT * FROM book WHERE id=$1`, [id]));
@@ -35,12 +36,8 @@ class BookService {
 
     async addBook({title, authors, isbn, pages, year}) {
 
-        console.info(JSON.stringify(authors))
-
-        console.info(authors)
-
-        const id = `book-${year}${nanoid(5)}`;
-        // const isbn = parseInt(customRandom(`1234567890`, 10).toString());
+  
+        const id = `book-${year}${nanoid(5)}`;  
         const createdAt = new Date().toLocaleString("id-ID");;
         const updatedAt = createdAt;
 
@@ -73,24 +70,51 @@ class BookService {
         
         const updatedAt = new Date().toLocaleString("id-ID");
         const query = {
-            text: 'UPDATE book SET title = $1, authors = $2, isbn = $3, pages = $4, year = $5, updated_at= $6 WHERE id=$7 RETURNING id',
+            text: 'UPDATE book SET title=$1, authors=$2, isbn=$3, pages=$4, year=$5, updated_at=$6 WHERE id=$7 RETURNING *',
             values: [title, authors, isbn, pages, year, updatedAt, id]
         }
 
         try {
             
-            const resultID = await (await this.db.query(query)).rows[0];
-
-            console.info(resultID)
-
-            if (!resultID) {
+            const result = await this.db.query(query);
+          
+            if (!result.rows[0]) {
                 throw new Error('Add new note failure')
             }
-    
-            return resultID;
+
+            return result.rows[0];
             
         } catch (err) {
             console.info(`err.stack :${err.stack}`);
+        } 
+
+        
+
+    }
+
+
+
+    async deleteBookById(id) {
+        
+        const query = {
+            text: 'DELETE FROM book WHERE id=$1 RETURNING *',
+            values: [id]
+        }
+
+        try {
+            
+            const r = await this.db.query(query);
+
+            console.info(r.rows[0])
+
+            if (!r.rows[0]) {
+                throw new Error('book deleted book on query')
+            }
+    
+            return r.rows[0];
+            
+        } catch (err) {
+            throw err;
         } 
 
         
