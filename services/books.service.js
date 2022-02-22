@@ -18,11 +18,13 @@ class BookService {
 
     async getBookById(id) {
         try {
-            this.addBook().then().catch()
             const book = (await this.db.query(`SELECT * FROM book WHERE id=$1`, [id]));
+
             if (!book.rowCount) {
                 throw new RangeError(`book with id ${id} not found`)
             }
+            return book.rows[0]
+
         } catch (err) {
             throw err;
         } 
@@ -58,7 +60,7 @@ class BookService {
             return result.rows[0].id;
             
         } catch (err) {
-            console.info(err) ;
+            throw err;
         } 
 
         
@@ -67,33 +69,28 @@ class BookService {
 
 
 
-    async updateBookById({id, title, authors, isbn, pages, year}) {
-
-        console.info(JSON.stringify(authors))
-
-        console.info(authors)
-
+    async updateBookById(id, {title, authors, isbn, pages, year}) {
         
-        const createdAt = new Date().toLocaleString("id-ID");;
-        const updatedAt = createdAt;
-
+        const updatedAt = new Date().toLocaleString("id-ID");
         const query = {
-            text: 'INSERT INTO book (id, title, authors, isbn, pages, year, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
-            values: [id, title, authors, isbn, pages, year, createdAt, updatedAt]
+            text: 'UPDATE book SET title = $1, authors = $2, isbn = $3, pages = $4, year = $5, updated_at= $6 WHERE id=$7 RETURNING id',
+            values: [title, authors, isbn, pages, year, updatedAt, id]
         }
 
         try {
-            console.info(`values: ${query.values}`)
-            const result = await this.db.query(query);
+            
+            const resultID = await (await this.db.query(query)).rows[0];
 
-            if (!result.rows[0].id) {
+            console.info(resultID)
+
+            if (!resultID) {
                 throw new Error('Add new note failure')
             }
     
-            return result.rows[0].id;
+            return resultID;
             
         } catch (err) {
-            console.info(err) ;
+            console.info(`err.stack :${err.stack}`);
         } 
 
         
