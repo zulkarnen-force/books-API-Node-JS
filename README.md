@@ -5,24 +5,31 @@ This API adalah fire.
 
 ## BASE API
 
-`http://localhost:3000`
+```url
+http://localhost:3000
+```
 
 
 
 ## Get Books
 
-`GET /books`
+```http
+GET /books
+```
 
 ### Query Params `optional`
 
-`GET /books?sort=values`
+```http
+GET /books?sort=values
+```
 
 | Value | Description |
-| --- | ----------- |
+| :---- | :---- |
 | title |sorting books by  title |
 | year | sorting books by year |
 
-**Example Response**
+
+### **Example Response**
 
 
 ```json
