@@ -47,24 +47,86 @@ function responseSuccess({res, code=200, status='OK', message='success',  detail
 
 }
 
+// routeBooks.get('/', async (req, res) => {
+
+//     try {
+//         const books = await bookService.getBooks();
+//         res.status(200).json({
+//             success: true,
+//             data: {
+//                 books
+//             }
+//         })
+//     } catch (err) {
+//         if (err instanceof DatabaseError) {
+//             responseError({res, message: err.message})
+//         }
+//     }
+
+
+// })
+
+
+const isQuery = (query) =>  {
+    const filterArr = ['title', 'year']
+    return filterArr.includes(query);
+}
+
+
+
 routeBooks.get('/', async (req, res) => {
 
-    try {
-        const books = await bookService.getBooks();
-        res.status(200).json({
-            success: true,
-            data: {
-                books
+    const sort = req.query.sort;
+
+    if (isQuery(sort)) {
+
+        try {
+            const books = await bookService.getBooksSortBy(sort);
+            res.status(200).json({
+                success: true,
+                data: {
+                    books
+                }
+            })
+        } catch (err) {
+            if (err instanceof DatabaseError) {
+                responseError({res, message: err.message})
             }
-        })
-    } catch (err) {
-        if (err instanceof DatabaseError) {
-            responseError({res, message: err.message})
+        }
+        
+    } else {
+        try {
+            const books = await bookService.getBooks();
+            res.status(200).json({
+                success: true,
+                data: {
+                    books
+                }
+            })
+        } catch (err) {
+            if (err instanceof DatabaseError) {
+                responseError({res, message: err.message})
+            }
         }
     }
 
+    
+    
+
+        
+
+    
+
+
+
+    
+
 
 })
+
+
+
+
 
 routeBooks.get('/:bookid', async (req, res) => {
 
