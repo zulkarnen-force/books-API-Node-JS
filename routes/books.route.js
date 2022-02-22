@@ -25,13 +25,34 @@ function responseError({res, code=500, status='internal server error', message='
 
 }
 
+
+function responseSuccess({res, code=200, status='OK', message='success',  detail='', data})  {
+
+      
+    const successValues = Object.assign({success: true},
+        code ? {code} : null,
+        status ? {status}  : null,
+        message ? {message}  : null,
+        detail ? {detail}: null,
+    )
+  
+  
+    return res.status(code).json({
+      successValues
+    })
+  
+
+}
+
 routeBooks.get('/', async (req, res) => {
 
     try {
-        const r = await bookService.getBooks();
+        const books = await bookService.getBooks();
         res.status(200).json({
-            success: true, 
-            books: r
+            success: true,
+            data: {
+                books
+            }
         })
     } catch (err) {
         if (err instanceof DatabaseError) {
@@ -39,21 +60,8 @@ routeBooks.get('/', async (req, res) => {
         }
     }
 
-    
 
-    // res.status(200).json({
-    //     status: true,
-    //     data: {
-    //         nama: 'example-name',
-    //     },
-    //     links: {
-    //         self: `books/req.url`,
-    //         ref: 'localhost:3000/books/{bookid}'
-    //     }
-    // })
 })
-
-
 
 routeBooks.get('/:bookid', async (req, res) => {
     // TODO
@@ -74,6 +82,10 @@ routeBooks.get('/:bookid', async (req, res) => {
 
 })
 
+
+
+
+
 routeBooks.post('/', async (req, res) => {
 
     // TODO
@@ -81,10 +93,19 @@ routeBooks.post('/', async (req, res) => {
     console.info(req.body)
 
     try {
-        const r = await bookService.addBook(req.body);
+        const id = await bookService.addBook(req.body);
+        
+
         res.status(201).json({
             success: true, 
-            books: r
+            code: 201, 
+            status: 'created',
+            message: 'books created successfully',
+            data: {
+                book: {
+                    id
+                }
+            }
         })
     } catch (err) {
         if (err instanceof DatabaseError) {
@@ -92,7 +113,7 @@ routeBooks.post('/', async (req, res) => {
         } else if (err instanceof RangeError) {
             responseError({res, code: 404, status: 'not found', message: err.message})
         } else {
-            responseError({res, code: 555, status: 'not found', message: err.message})
+            responseError({res, code: 555, status: 'bad backend', message: err.message})
         }
     }
 
@@ -100,8 +121,8 @@ routeBooks.post('/', async (req, res) => {
 
 
 
-routeBooks.put('/', (req, res) => {
-    // TODO
+routeBooks.put('/:bookid', (req, res) => {
+    
 })
 
 routeBooks.delete('/:bookid', (req, res) => {
