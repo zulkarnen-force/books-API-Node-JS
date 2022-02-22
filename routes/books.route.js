@@ -29,7 +29,8 @@ function responseError({res, code=500, status='internal server error', message='
 function responseSuccess({res, code=200, status='OK', message='success',  detail='', data})  {
 
       
-    const successValues = Object.assign({success: true},
+    const successValues = Object.assign({},
+        {success: true},
         code ? {code} : null,
         status ? {status}  : null,
         message ? {message}  : null,
@@ -37,9 +38,9 @@ function responseSuccess({res, code=200, status='OK', message='success',  detail
     )
   
   
-    return res.status(code).json({
+    return res.status(code).json(
       successValues
-    })
+    )
   
 
 }
@@ -64,7 +65,6 @@ routeBooks.get('/', async (req, res) => {
 })
 
 routeBooks.get('/:bookid', async (req, res) => {
-    // TODO
 
     try {
         const r = await bookService.getBookById(req.params.bookid);
@@ -121,8 +121,27 @@ routeBooks.post('/', async (req, res) => {
 
 
 
-routeBooks.put('/:bookid', (req, res) => {
-    
+routeBooks.put('/:bookid', async (req, res) => {
+
+    try {
+        
+        const resu = await bookService.updateBookById(req.params.bookid, req.body);
+
+        console.info(resu)
+
+        responseSuccess({res, code: 201, status: "updated", message: "update book successfull", detail: "detail"})
+
+    } catch (err) {
+        if (err instanceof DatabaseError) {
+            responseError({res, message: err.message})
+        } else if (err instanceof RangeError) {
+            responseError({res, code: 404, status: 'not found', message: err.message})
+        } else {
+            responseError({res, code: 555, status: 'bad backend', message: err.message})
+        }
+    }
+
+
 })
 
 routeBooks.delete('/:bookid', (req, res) => {
