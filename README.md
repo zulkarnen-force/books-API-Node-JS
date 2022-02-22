@@ -19,8 +19,8 @@ This API adalah fire.
 
 | Value | Description |
 | --- | ----------- |
-| title |sorting books with  title |
-| year | sorting books with year |
+| title |sorting books by  title |
+| year | sorting books by year |
 
 **Example Response**
 
