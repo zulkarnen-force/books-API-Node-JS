@@ -130,8 +130,6 @@ class BookService {
             throw err;
         } 
 
-        
-
     }
 
     
