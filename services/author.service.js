@@ -144,26 +144,8 @@ class AuthorService {
 
             const countBooks = books.length;
 
-            console.log('Count Books ', countBooks)
-
-            // const author = r.map(author => {
-            //     return {
-            //         id: author.author_id,
-            //         name: author.name,
-            //         count: count
-            //     }
-            // })
 
             return Object.assign(author, {countBooks, books})
-
-
-            // const data = Object.assign({}, {
-            //     r.map(e => 
-            //         {
-            //             id: e.book_id, 
-            //             e.book_id, e
-            //         })
-            // })
 
         } catch (e) {
             console.info(e)
