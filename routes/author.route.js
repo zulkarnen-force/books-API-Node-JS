@@ -171,6 +171,16 @@ routesAuthor.delete('/:id', async (req, res) => {
 })
 
 
+routesAuthor.get('/detail/:id', async (req, res) => {
+    try {
+        const r  = await authorService.authorDetailById(req.params.id);
+        responseSuccess({res, code: 200, message: `detail of author with id ${req.params.id}`, data: r})
+    } catch (e) {
+        console.error(e)
+    }
+})
+
+
 
 
 

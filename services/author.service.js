@@ -1,4 +1,4 @@
-const {Pool} = require('pg');
+const { Pool } = require('pg');
 const { nanoid } = require('nanoid')
 
 class AuthorService {
@@ -117,6 +117,58 @@ class AuthorService {
 
         
 
+    }
+
+
+
+    async authorDetailById(id) {
+        const q = {
+            text: `SELECT Author.*, Book.book_id, Book.title, Book.pages FROM Author JOIN
+            Book ON Book.author_id= Author.author_id WHERE Author.author_id = $1`,
+            values: [id]
+        }
+
+        try {
+            
+            const author = await (await this.db.query(`SELECT author_id, name, created_at, updated_at FROM Author WHERE author_id = $1`, [id])).rows[0]
+            const r = (await this.db.query(q)).rows;
+            
+           
+            const books = r.map( e => {
+                return {
+                    id: e.book_id, 
+                    title: e.title,
+                    pages: e.pages
+                }
+            })
+
+            const countBooks = books.length;
+
+            console.log('Count Books ', countBooks)
+
+            // const author = r.map(author => {
+            //     return {
+            //         id: author.author_id,
+            //         name: author.name,
+            //         count: count
+            //     }
+            // })
+
+            return Object.assign(author, {countBooks, books})
+
+
+            // const data = Object.assign({}, {
+            //     r.map(e => 
+            //         {
+            //             id: e.book_id, 
+            //             e.book_id, e
+            //         })
+            // })
+
+        } catch (e) {
+            console.info(e)
+            throw e;
+        }
     }
 
     
