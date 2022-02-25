@@ -124,31 +124,41 @@ class PublisherService {
 
     async getDetailsPublisherById(id) {
         
-        const query = {
-            text: 'DELETE FROM Publisher WHERE publisher_id=$1 RETURNING *',
+        const q = {
+            text: `SELECT Book.book_id, Book.title, Book.pages, Author.name FROM Book JOIN
+            Author ON Book.author_id= Author.author_id WHERE Book.publisher_id = $1`,
             values: [id]
         }
 
-        try {
-            
-            const r = await this.db.query(query);
-
-            if (!r.rows[0]) {
-                throw new Error('delete publisher failure')
-            }
-    
-            return r.rows[0];
-            
-        } catch (err) {
-            throw err;
-        } 
-
         
+        try {
+            const booksOfPublisher = (await this.db.query(q)).rows;
+            const publisher = await this.getPublisherById(id)
+            console.info("booksOfPublisher ", booksOfPublisher);
+            console.info("publisher ", publisher);
+
+            
+            return Object.assign({publisher: {
+                id: publisher.publisher_id,
+                name: publisher.name,
+                city: publisher.city,
+                countBooks: booksOfPublisher.length,
+                books: booksOfPublisher
+            }})
+
+        } catch (e) {
+            console.error(e);
+        }
 
     }
 
-    
+        
+
+        
 }
+
+
+
 
 
 
