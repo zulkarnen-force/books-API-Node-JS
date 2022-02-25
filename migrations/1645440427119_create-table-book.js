@@ -4,20 +4,17 @@ exports.shorthands = undefined;
 
 exports.up = pgm => {
     pgm.createTable('book', {
-        id: {
+        book_id: {
            type: 'VARCHAR(50)',
-           notNull: true
+           notNull: true,
+           primaryKey: true,
         }, 
         title:{
             type: 'VARCHAR(100)',
             notNull: true
         },
-        authors: {
-            type: 'TEXT[5]',
-            notNull: true,
-        },
         isbn: {
-            type: 'INTEGER',
+            type: 'varchar(10)',
             notNull: true,
         },
         pages:{
@@ -36,6 +33,14 @@ exports.up = pgm => {
             type: 'TEXT', 
             notNull: true
         },
+        author_id: {
+            type: 'VARCHAR(50)',
+            notNull: true,
+        },
+        publisher_id: {
+            type: 'VARCHAR(50)',
+            notNull: true,
+        }
     })
 };
 
