@@ -76,51 +76,20 @@ const isQuery = (query) =>  {
 
 routePublisher.get('/', async (req, res) => {
 
-    const sort = req.query.sort;
-
-    if (isQuery(sort)) {
-
-        try {
-            const books = await publisherService.getBooksSortBy(sort);
-            res.status(200).json({
-                success: true,
-                data: {
-                    books
-                }
-            })
-        } catch (err) {
-            if (err instanceof DatabaseError) {
-                responseError({res, message: err.message})
+    try {
+        const publishers = await publisherService.getPublishers();
+        res.status(200).json({
+            success: true,
+            data: {
+                publishers
             }
-        }
-        
-    } else {
-        try {
-            const books = await publisherService.getBooks();
-            res.status(200).json({
-                success: true,
-                data: {
-                    books
-                }
-            })
-        } catch (err) {
-            if (err instanceof DatabaseError) {
-                responseError({res, message: err.message})
-            }
+        })
+    } catch (err) {
+        if (err instanceof DatabaseError) {
+            responseError({res, message: err.message})
         }
     }
-
     
-    
-
-        
-
-    
-
-
-
-    
-
 
 })
 
@@ -128,13 +97,15 @@ routePublisher.get('/', async (req, res) => {
 
 
 
-routePublisher.get('/:bookid', async (req, res) => {
+routePublisher.get('/:id', async (req, res) => {
 
     try {
-        const r = await publisherService.getBookById(req.params.bookid);
+        const publisher = await publisherService.getPublisherById(req.params.id);
         res.status(200).json({
             success: true, 
-            books: r
+            data: {
+                publisher
+            }
         })
     } catch (err) {
         if (err instanceof DatabaseError) {
@@ -181,15 +152,15 @@ routePublisher.post('/', async (req, res) => {
 
 
 
-routePublisher.put('/:bookid', async (req, res) => {
+routePublisher.put('/:id', async (req, res) => {
 
     try {
         
-        const result = await publisherService.updateBookById(req.params.bookid, req.body);
+        const result = await publisherService.updatePublisherById(req.params.id, req.body);
         
         console.info({iniHasil: result})
 
-        responseSuccess({res, code: 201, status: "updated", message: "update book successfull", detail: "detail", data: result })
+        responseSuccess({res, code: 201, status: "updated", message: "update publisher successfully", detail: "detail", data: result })
 
     } catch (err) {
         if (err instanceof DatabaseError) {
@@ -206,13 +177,13 @@ routePublisher.put('/:bookid', async (req, res) => {
 
 
 
-routePublisher.delete('/:bookid', async (req, res) => {
+routePublisher.delete('/:id', async (req, res) => {
 
     try {
         
-        const book = await publisherService.deleteBookById(req.params.bookid);
+        const publisher = await publisherService.deletePublisherById(req.params.id);
 
-        responseSuccess({res, code: 200, status: "deleted", message: "deleted book successfully", detail: `book with title ${book.title} success deleted`})
+        responseSuccess({res, code: 200, status: "deleted", message: "deleted publisher successfully", detail: `publisher with name ${publisher.name} success deleted`, data: publisher})
 
     } catch (err) {
         if (err instanceof DatabaseError) {
