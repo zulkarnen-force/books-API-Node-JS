@@ -70,25 +70,25 @@ routesAuthor.get('/', async (req, res) => {
 
 
 
-routesAuthor.get('/:id', async (req, res) => {
+// routesAuthor.get('/:id', async (req, res) => {
 
-    try {
-        const author = await authorService.getAuthorById(req.params.id);
-        res.status(200).json({
-            success: true, 
-            data: {
-                author
-            }
-        })
-    } catch (err) {
-        if (err instanceof DatabaseError) {
-            responseError({res, message: err.message})
-        } else if (err instanceof RangeError) {
-            responseError({res, code: 404, status: 'not found', message: err.message})
-        }
-    }
+//     try {
+//         const author = await authorService.getAuthorById(req.params.id);
+//         res.status(200).json({
+//             success: true, 
+//             data: {
+//                 author
+//             }
+//         })
+//     } catch (err) {
+//         if (err instanceof DatabaseError) {
+//             responseError({res, message: err.message})
+//         } else if (err instanceof RangeError) {
+//             responseError({res, code: 404, status: 'not found', message: err.message})
+//         }
+//     }
 
-})
+// })
 
 
 
@@ -171,7 +171,7 @@ routesAuthor.delete('/:id', async (req, res) => {
 })
 
 
-routesAuthor.get('/detail/:id', async (req, res) => {
+routesAuthor.get('/:id', async (req, res) => {
     try {
         const r  = await authorService.authorDetailById(req.params.id);
         responseSuccess({res, code: 200, message: `detail of author with id ${req.params.id}`, data: r})
