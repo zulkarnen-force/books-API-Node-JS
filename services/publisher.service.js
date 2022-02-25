@@ -17,19 +17,19 @@ class PublisherService {
 
    
 
-    // async getBookById(id) {
-    //     try {
-    //         const book = (await this.db.query(`SELECT * FROM book WHERE id=$1`, [id]));
+    async getPublisherById(id) {
+        try {
+            const publisher = (await this.db.query(`SELECT * FROM Publisher WHERE publisher_id=$1`, [id]));
 
-    //         if (!book.rowCount) {
-    //             throw new RangeError(`book with id ${id} not found`)
-    //         }
-    //         return book.rows[0]
+            if (!publisher.rowCount) {
+                throw new RangeError(`publisher with id ${id} not found`)
+            }
+            return publisher.rows[0]
 
-    //     } catch (err) {
-    //         throw err;
-    //     } 
-    // }
+        } catch (err) {
+            throw err;
+        } 
+    }
 
 
     
@@ -67,12 +67,12 @@ class PublisherService {
 
 
 
-    async updateBookById(id, {title, authors, isbn, pages, year}) {
+    async updatePublisherById(id, {name, city}) {
         
         const updatedAt = new Date().toLocaleString("id-ID");
         const query = {
-            text: 'UPDATE book SET title=$1, authors=$2, isbn=$3, pages=$4, year=$5, updated_at=$6 WHERE id=$7 RETURNING *',
-            values: [title, authors, isbn, pages, year, updatedAt, id]
+            text: 'UPDATE Publisher SET name=$1, city=$2, updated_at=$3 WHERE publisher_id=$4 RETURNING *',
+            values: [name, city, updatedAt, id]
         }
 
         try {
@@ -80,13 +80,14 @@ class PublisherService {
             const result = await this.db.query(query);
           
             if (!result.rows[0]) {
-                throw new Error('Add new note failure')
+                throw new Error('update publisher failure')
             }
 
             return result.rows[0];
             
         } catch (err) {
             console.info(`err.stack :${err.stack}`);
+            throw err;
         } 
 
         
@@ -95,10 +96,10 @@ class PublisherService {
 
 
 
-    async deleteBookById(id) {
+    async deletePublisherById(id) {
         
         const query = {
-            text: 'DELETE FROM book WHERE id=$1 RETURNING *',
+            text: 'DELETE FROM Publisher WHERE publisher_id=$1 RETURNING *',
             values: [id]
         }
 
@@ -106,10 +107,8 @@ class PublisherService {
             
             const r = await this.db.query(query);
 
-            console.info(r.rows[0])
-
             if (!r.rows[0]) {
-                throw new Error('book deleted book on query')
+                throw new Error('delete publisher failure')
             }
     
             return r.rows[0];
