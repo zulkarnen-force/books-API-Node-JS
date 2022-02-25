@@ -144,11 +144,12 @@ class AuthorService {
 
             const countBooks = books.length;
 
-
-            return Object.assign(author, {countBooks, books})
+            const authorWithCountBooks = Object.assign(author, {countBooks});
+            
+            
+            return {author: authorWithCountBooks, books}
 
         } catch (e) {
-            console.info(e)
             throw e;
         }
     }
