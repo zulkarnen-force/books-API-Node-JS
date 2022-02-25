@@ -121,6 +121,32 @@ class PublisherService {
 
     }
 
+
+    async getDetailsPublisherById(id) {
+        
+        const query = {
+            text: 'DELETE FROM Publisher WHERE publisher_id=$1 RETURNING *',
+            values: [id]
+        }
+
+        try {
+            
+            const r = await this.db.query(query);
+
+            if (!r.rows[0]) {
+                throw new Error('delete publisher failure')
+            }
+    
+            return r.rows[0];
+            
+        } catch (err) {
+            throw err;
+        } 
+
+        
+
+    }
+
     
 }
 
