@@ -65,23 +65,23 @@ GET /books?sort=values
 
    
 
-| Key      | column | type     |
+| key      | column | type     |
 | :---:        |    :---  |          :--- |
-| PK      | book_id       |    |
-|    | isbn        | varchar(50)       |
-|    | pages        | varchar(50)       |
-|    | year       | varchar(50)       |
-|   FK | author_id        | varchar(10)       |
-|  FK  | publisher_id        | varchar(50)       |
+| PK      | book_id       |    varchar|
+|    | isbn        | varchar     |
+|    | pages        | integer     |
+|    | year       | integer     |
+|   FK | author_id        | varchar     |
+|  FK  | publisher_id        | varchar      |
 
 
 </td><td>
 
 
-| Key      | column | type     |
+| key      | column | type     |
 | :---:        |    :---  |          :--- |
-| PK      | author_id       |    |
-|    | name        | varchar(50)       |
+| PK      | author_id       |  varchar  |
+|    | name        | varchar    |
 |    | created_at        | TEXT       |
 |    | updated_at        | TEXT       |
 
@@ -89,11 +89,11 @@ GET /books?sort=values
 </td><td>
 
 
-| Key      | column | type     |
+| key      | column | type     |
 | :---:        |    :---  |          :--- |
-| PK      | publisher_id       |    |
-|    | name        | varchar(50)       |
-|    | city        | varchar(50)       |
+| PK      | publisher_id       |  varchar |
+|    | name        | varchar   |
+|    | city        | varchar      |
 |    | created_at        | TEXT       |
 |    | updated_at        | TEXT       |
 
@@ -101,6 +101,10 @@ GET /books?sort=values
     
     
  # Challenge
+ 
+ # Get Details of Authors
+ 
+To get details information authors using id of author
     
 ```http
 GET /authors/{id}
@@ -144,6 +148,62 @@ GET /authors/AUT-823Br
                 "pages": 200
             }
         ]
+    }
+}
+```
+
+
+
+ # Get Details of Publishers
+ 
+To get details information Publishers using id of publisher
+
+```http
+GET /publisher/{id}
+```
+
+## Example Request
+
+```http
+GET /publishers/PUB-3h20a
+```
+
+
+## Example Response
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "OK",
+    "message": "detail of publisher with id PUB-3h20a",
+    "data": {
+        "publisher": {
+            "id": "PUB-3h20a",
+            "name": "GM Media",
+            "city": "Jakarta",
+            "countBooks": 3,
+            "books": [
+                {
+                    "book_id": "book-2010RhWrR",
+                    "title": "Laskar Pelangi",
+                    "pages": 200,
+                    "name": "Andrea Hirata"
+                },
+                {
+                    "book_id": "book-2009JCO8P",
+                    "title": "Laskar Bulan",
+                    "pages": 185,
+                    "name": "Andrea Hirata"
+                },
+                {
+                    "book_id": "book-2021KmlTx",
+                    "title": "Laskar Ksatria",
+                    "pages": 200,
+                    "name": "Andrea Hirata"
+                }
+            ]
+        }
     }
 }
 ```
