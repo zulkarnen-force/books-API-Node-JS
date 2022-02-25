@@ -9,7 +9,8 @@ class BookService {
 
     async getBooks() {
         try {
-            return (await this.db.query('SELECT * FROM book')).rows;
+            return (await this.db.query(`SELECT Book.book_id, Book.title, Author.name FROM Book
+                JOIN Author ON Author.author_id = Book.author_id`)).rows;
         } catch (err) {
             throw err;
         }
@@ -29,12 +30,13 @@ class BookService {
 
     async getBookById(id) {
         try {
-            const book = (await this.db.query(`SELECT * FROM book WHERE id=$1`, [id]));
+            const book = (await this.db.query(`SELECT Book.book_id AS id, Book.title, Author.name, Book.isbn, Book.pages, 
+            Book.year, Book.created_at , Book.updated_at FROM Book JOIN Author ON Author.author_id = Book.author_id WHERE book_id=$1` , [id]));
 
             if (!book.rowCount) {
                 throw new RangeError(`book with id ${id} not found`)
             }
-            return book.rows[0]
+            return book.rows[0] 
 
         } catch (err) {
             throw err;
@@ -44,7 +46,7 @@ class BookService {
 
     
 
-    async addBook({title, authors, isbn, pages, year}) {
+    async addBook({title, isbn, pages, year, author_id, publisher_id}) {
 
   
         const id = `book-${year}${nanoid(5)}`;  
@@ -52,19 +54,20 @@ class BookService {
         const updatedAt = createdAt;
 
         const query = {
-            text: 'INSERT INTO book (id, title, authors, isbn, pages, year, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
-            values: [id, title, authors, isbn, pages, year, createdAt, updatedAt]
+            text: `INSERT INTO Book (book_id, title, isbn, pages, year, created_at, updated_at, author_id, publisher_id) VALUES 
+                                    ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING book_id`,
+            values: [id, title, isbn, pages, year, createdAt, updatedAt, author_id, publisher_id]
         }
 
         try {
-            console.info(`values: ${query.values}`)
+            
             const result = await this.db.query(query);
 
-            if (!result.rows[0].id) {
+            if (!result.rows[0].book_id) {
                 throw new Error('Add new note failure')
             }
     
-            return result.rows[0].id;
+            return result.rows[0].book_id;
             
         } catch (err) {
             throw err;
