@@ -97,25 +97,25 @@ routePublisher.get('/', async (req, res) => {
 
 
 
-routePublisher.get('/:id', async (req, res) => {
+// routePublisher.get('/:id', async (req, res) => {
 
-    try {
-        const publisher = await publisherService.getPublisherById(req.params.id);
-        res.status(200).json({
-            success: true, 
-            data: {
-                publisher
-            }
-        })
-    } catch (err) {
-        if (err instanceof DatabaseError) {
-            responseError({res, message: err.message})
-        } else if (err instanceof RangeError) {
-            responseError({res, code: 404, status: 'not found', message: err.message})
-        }
-    }
+//     try {
+//         const publisher = await publisherService.getPublisherById(req.params.id);
+//         res.status(200).json({
+//             success: true, 
+//             data: {
+//                 publisher
+//             }
+//         })
+//     } catch (err) {
+//         if (err instanceof DatabaseError) {
+//             responseError({res, message: err.message})
+//         } else if (err instanceof RangeError) {
+//             responseError({res, code: 404, status: 'not found', message: err.message})
+//         }
+//     }
 
-})
+// })
 
 
 
@@ -198,6 +198,16 @@ routePublisher.delete('/:id', async (req, res) => {
 
 })
 
+
+
+routePublisher.get('/:id', async (req, res) => {
+    try {
+        const r  = await publisherService.getDetailsPublisherById(req.params.id);
+        responseSuccess({res, code: 200, message: `detail of publisher with id ${req.params.id}`, data: r})
+    } catch (e) {
+        console.error(e)
+    }
+})
 
 
 
