@@ -9,11 +9,23 @@ class BookService {
 
     async getBooks() {
         try {
-            return (await this.db.query(`SELECT Book.book_id, Book.title, Author.name FROM Book
+
+            const booksData = (await this.db.query(`SELECT Book.book_id AS id, Book.title, Author.name AS author_name FROM Book
                 JOIN Author ON Author.author_id = Book.author_id`)).rows;
+
+
+            const books = booksData.map(book => {
+                
+                return {id:book.id, title:book.title, authorName: book.author_name}
+
+            })
+
+            return books;   
+
         } catch (err) {
             throw err;
         }
+
     }
 
     async getBooksSortBy(sortQuery) {
