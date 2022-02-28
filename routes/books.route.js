@@ -1,17 +1,20 @@
 const routeBooks = require('express').Router();
+const {ValidationError} = require('joi');
 const { DatabaseError } = require('pg');
 const BookService = require('../services/books.service');
+const { validateBookPost } = require('../utils/validate-body-request.util');
 
 
 let bookService = new BookService();
 
 
-function responseError({res, code=500, status='internal server error', message='error from internal',  detail=''})  {
+function responseError({res, code=500, status='internal server error', message='error from internal',  detail='', type=""})  {
 
    
     const errorValues = Object.assign({}, 
         code ? {code} : null,
         status ? {status}  : null,
+        type ? {type}: null,
         message ? {message}  : null,
         detail ? {detail}: null
     )
@@ -157,9 +160,9 @@ routeBooks.post('/', async (req, res) => {
    
 
     try {
-        const id = await bookService.addBook(req.body);
-        
 
+        const [validateRes, id] = await Promise.all([validateBookPost.validateAsync(req.body), bookService.addBook(req.body)])
+       
         res.status(201).json({
             success: true, 
             code: 201, 
@@ -176,8 +179,14 @@ routeBooks.post('/', async (req, res) => {
             responseError({res, message: err.message})
         } else if (err instanceof RangeError) {
             responseError({res, code: 404, status: 'not found', message: err.message})
+        } else if (err instanceof ValidationError) {
+            responseError({
+                res, code: 400,
+                status: 'bad request',
+                type: err.name,
+                message: err.details[0].message, detail: `replace value ${err.details[0].context.value} with ${err.details[0].type}`  })
         } else {
-            responseError({res, code: 555, status: 'bad backend', message: err.message})
+            responseError({res, code: 500, status: 'bad backend', message: err.message})
         }
     }
 
