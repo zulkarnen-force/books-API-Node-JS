@@ -22,7 +22,7 @@ app.use((req, res) => {
             detail: `page ${req.url} not found`
         },
         links: {
-            base: 'https://localhost:3000'
+            base: 'http://localhost:3000'
         }
     })
 })
