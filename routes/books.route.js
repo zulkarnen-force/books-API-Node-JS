@@ -164,7 +164,7 @@ routeBooks.post('/', async (req, res) => {
             success: true, 
             code: 201, 
             status: 'created',
-            message: 'books created successfully',
+            message: 'book created successfully',
             data: {
                 book: {
                     id
