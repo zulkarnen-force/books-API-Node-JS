@@ -1,6 +1,9 @@
 const routePublisher = require('express').Router();
 const { DatabaseError } = require('pg');
 const PublisherService = require('../services/publisher.service');
+const {validatePublisherPost} = require('../utils/validate-body-request.util')
+const {ValidationError} = require('joi');
+const { responseBodyError } = require('../utils/body-response.util');
 
 
 let publisherService = new PublisherService();
@@ -26,9 +29,6 @@ function responseError({res, code=500, status='internal server error', message='
 
 
 function responseSuccess({res, code=200, status='OK', message='success',  detail='', data})  {
-
-    
-    console.info({data})
 
     const successValues = Object.assign({},
         {success: true},
@@ -78,8 +78,8 @@ routePublisher.get('/', async (req, res) => {
 routePublisher.post('/', async (req, res) => {
 
     try {
-        const id = await publisherService.addPublisher(req.body);
-        
+
+        const [validateRes, id] = await Promise.all([validatePublisherPost.validateAsync(req.body), publisherService.addPublisher(req.body)])       
 
         res.status(201).json({
             success: true, 
@@ -92,12 +92,19 @@ routePublisher.post('/', async (req, res) => {
                 }
             }
         })
+
     } catch (err) {
         if (err instanceof DatabaseError) {
             responseError({res, message: err.message})
         } else if (err instanceof RangeError) {
             responseError({res, code: 404, status: 'not found', message: err.message})
-        } else {
+        } else if (err instanceof ValidationError) {
+            responseBodyError({
+                res, code: 400,
+                status: 'bad request',
+                type: err.name,
+                message: err.details[0].message, detail: `replace value ${err.details[0].context.value} with ${err.details[0].type}`  })
+        }else {
             responseError({res, code: 555, status: 'bad backend', message: err.message})
         }
     }
