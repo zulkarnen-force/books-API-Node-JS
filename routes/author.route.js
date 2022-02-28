@@ -67,33 +67,6 @@ routesAuthor.get('/', async (req, res) => {
 })
 
 
-
-
-
-// routesAuthor.get('/:id', async (req, res) => {
-
-//     try {
-//         const author = await authorService.getAuthorById(req.params.id);
-//         res.status(200).json({
-//             success: true, 
-//             data: {
-//                 author
-//             }
-//         })
-//     } catch (err) {
-//         if (err instanceof DatabaseError) {
-//             responseError({res, message: err.message})
-//         } else if (err instanceof RangeError) {
-//             responseError({res, code: 404, status: 'not found', message: err.message})
-//         }
-//     }
-
-// })
-
-
-
-
-
 routesAuthor.post('/', async (req, res) => {
 
     try {
