@@ -20,14 +20,10 @@ function responseError({res, code=500, status='internal server error', message='
       errors: errorValues
     })
   
-
 }
 
 
 function responseSuccess({res, code=200, status='OK', message='success',  detail='', data})  {
-
-    
-    console.info({data})
 
     const successValues = Object.assign({},
         {success: true},
@@ -104,7 +100,6 @@ routesAuthor.put('/:id', async (req, res) => {
         
         const result = await authorService.updateAuthorById(req.params.id, req.body);
     
-
         responseSuccess({res, code: 201, status: "updated", message: "update author successfully", detail: "detail", data: result })
 
     } catch (err) {
