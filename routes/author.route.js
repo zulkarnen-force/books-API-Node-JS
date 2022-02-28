@@ -75,7 +75,7 @@ routesAuthor.post('/', async (req, res) => {
             status: 'created',
             message: 'author created successfully',
             data: {
-                authors: {
+                author: {
                     id
                 }
             }
