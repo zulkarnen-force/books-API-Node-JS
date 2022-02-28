@@ -114,16 +114,6 @@ routeBooks.get('/', async (req, res) => {
     }
 
     
-    
-
-        
-
-    
-
-
-
-    
-
 
 })
 
