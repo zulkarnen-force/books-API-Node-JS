@@ -13,4 +13,20 @@ const validateBookPost = joi.object({
 })
 
 
-module.exports = { validateBookPost }
+const validateAuthorPost = joi.object({
+
+    name: joi.string().required(),
+
+})
+
+
+
+const validatePublisherPost = joi.object({
+
+    name: joi.string().required(),
+    city: joi.string().required()
+
+})
+
+
+module.exports = { validateBookPost, validateAuthorPost, validatePublisherPost }
