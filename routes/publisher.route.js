@@ -47,25 +47,6 @@ function responseSuccess({res, code=200, status='OK', message='success',  detail
 
 }
 
-// routePublisher.get('/', async (req, res) => {
-
-//     try {
-//         const books = await publisherService.getBooks();
-//         res.status(200).json({
-//             success: true,
-//             data: {
-//                 books
-//             }
-//         })
-//     } catch (err) {
-//         if (err instanceof DatabaseError) {
-//             responseError({res, message: err.message})
-//         }
-//     }
-
-
-// })
-
 
 const isQuery = (query) =>  {
     const filterArr = ['title', 'year']
