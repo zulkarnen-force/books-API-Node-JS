@@ -505,3 +505,40 @@ GET /localhost:3000/penulis
 ```
 
 
+## Validate Body Request
+
+## Example
+
+```http
+POST /books
+```
+
+### Request 
+
+```json
+{
+    "title": 16,
+    "isbn":  "9786021318",
+    "pages": 140,
+    "year": 2004,
+    "author_id": "AUT-33Fx5",
+    "publisher_id": "PUB-a1azv" 
+}
+```
+
+### Response 
+
+```json
+{
+    "errors": {
+        "code": 400,
+        "status": "bad request",
+        "type": "ValidationError",
+        "message": "\"title\" must be a string",
+        "detail": "replace value 16 with string.base"
+    }
+}
+```
+
+
+
