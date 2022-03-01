@@ -131,10 +131,10 @@ class AuthorService {
         try {
             
             const author = await (await this.db.query(`SELECT author_id, name, created_at, updated_at FROM Author WHERE author_id = $1`, [id])).rows[0]
-            const r = (await this.db.query(q)).rows;
+            const booksDetail = (await this.db.query(q)).rows;
             
            
-            const books = r.map( e => {
+            const books = booksDetail.map( e => {
                 return {
                     id: e.book_id, 
                     title: e.title,
@@ -145,7 +145,6 @@ class AuthorService {
             const countBooks = books.length;
 
             const authorWithCountBooks = Object.assign(author, {countBooks});
-            
             
             return {author: authorWithCountBooks, books}
 
