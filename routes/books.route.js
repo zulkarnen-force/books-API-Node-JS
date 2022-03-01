@@ -50,25 +50,6 @@ function responseSuccess({res, code=200, status='OK', message='success',  detail
 
 }
 
-// routeBooks.get('/', async (req, res) => {
-
-//     try {
-//         const books = await bookService.getBooks();
-//         res.status(200).json({
-//             success: true,
-//             data: {
-//                 books
-//             }
-//         })
-//     } catch (err) {
-//         if (err instanceof DatabaseError) {
-//             responseError({res, message: err.message})
-//         }
-//     }
-
-
-// })
-
 
 const isQuery = (query) =>  {
     const filterArr = ['title', 'year']
@@ -113,8 +94,6 @@ routeBooks.get('/', async (req, res) => {
         }
     }
 
-    
-
 })
 
 
@@ -145,10 +124,6 @@ routeBooks.get('/:bookid', async (req, res) => {
 
 routeBooks.post('/', async (req, res) => {
 
-    // TODO
-
-   
-
     try {
 
         const [validateRes, id] = await Promise.all([validateBookPost.validateAsync(req.body), bookService.addBook(req.body)])
@@ -164,6 +139,7 @@ routeBooks.post('/', async (req, res) => {
                 }
             }
         })
+
     } catch (err) {
         if (err instanceof DatabaseError) {
             responseError({res, message: err.message})
@@ -189,8 +165,6 @@ routeBooks.put('/:bookid', async (req, res) => {
     try {
         
         const result = await bookService.updateBookById(req.params.bookid, req.body);
-        
-        console.info({iniHasil: result})
 
         responseSuccess({res, code: 201, status: "updated", message: "update book successfull", detail: "detail", data: result })
 
