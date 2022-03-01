@@ -197,7 +197,7 @@ POST /books
 ### Request
 ```json
 {
-    "title": "Sarapan Penuh Pagi Penuh Dusta",
+    "title": "Sarapan Pagi Penuh Dusta",
     "isbn":  "9786021318",
     "pages": 140,
     "year": 2004,
