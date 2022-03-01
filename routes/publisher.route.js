@@ -48,13 +48,6 @@ function responseSuccess({res, code=200, status='OK', message='success',  detail
 }
 
 
-const isQuery = (query) =>  {
-    const filterArr = ['title', 'year']
-    return filterArr.includes(query);
-}
-
-
-
 routePublisher.get('/', async (req, res) => {
 
     try {
@@ -119,8 +112,6 @@ routePublisher.put('/:id', async (req, res) => {
         
         const result = await publisherService.updatePublisherById(req.params.id, req.body);
         
-        console.info({iniHasil: result})
-
         responseSuccess({res, code: 201, status: "updated", message: "update publisher successfully", detail: "detail", data: result })
 
     } catch (err) {
