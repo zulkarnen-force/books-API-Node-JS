@@ -486,11 +486,14 @@ GET /publishers/PUB-3h20a
 
 ## Example
 
+### Request
+
 ```http
 GET /localhost:3000/penulis
 ```
 
-## Request
+### Response
+
 ```json
 {
     "errors": {
